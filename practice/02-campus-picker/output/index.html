@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>課間我想做什麼？</title>
+<style>
+body{font-family:system-ui,"Noto Sans TC",sans-serif;max-width:560px;margin:0 auto;padding:16px;line-height:1.5}
+.note{background:#fff3cd;padding:6px 10px;border-radius:6px;font-size:14px}
+label{display:block;margin:10px 0 4px;font-weight:600}
+select,button{font-size:16px;padding:8px;border-radius:6px}
+select{width:100%}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+#result{margin-top:16px;padding:12px;border:1px solid #ccc;border-radius:8px;min-height:24px}
+#history li{margin:4px 0}
+.top{display:flex;justify-content:space-between;align-items:center}
+</style></head><body>
+<div class="top"><h1 id="t-title"></h1><button id="lang"></button></div>
+<p class="note" id="t-note"></p>
+<label for="loc" id="t-loc"></label>
+<select id="loc"><option value="all"></option><option value="indoor"></option><option value="outdoor"></option></select>
+<label for="min" id="t-min"></label>
+<select id="min"><option value="15">15</option><option value="30" selected>30</option><option value="60">60</option></select>
+<label for="en" id="t-en"></label>
+<select id="en"><option value="all"></option><option value="low"></option><option value="medium"></option></select>
+<!--COUNT-->
+<div class="row"><button id="pick"></button><button id="reset"></button><button id="clear"></button></div>
+<div id="result" aria-live="polite"></div>
+<h2 id="t-hist"></h2><ol id="history"></ol>
+<script>
+const DATA = [{"id": "A01", "name_zh": "整理書包", "name_en": "Organize your bag", "location_type": "indoor", "minutes": 10, "energy": "low"}, {"id": "A02", "name_zh": "畫一張小卡", "name_en": "Draw a small card", "location_type": "indoor", "minutes": 15, "energy": "low"}, {"id": "A03", "name_zh": "寫三句讀書筆記", "name_en": "Write three study notes", "location_type": "indoor", "minutes": 10, "energy": "low"}, {"id": "A04", "name_zh": "安靜讀兩頁書", "name_en": "Read two pages quietly", "location_type": "indoor", "minutes": 15, "energy": "low"}, {"id": "A05", "name_zh": "排好明日待辦", "name_en": "Plan tomorrow’s tasks", "location_type": "indoor", "minutes": 20, "energy": "low"}, {"id": "A06", "name_zh": "整理本機練習檔", "name_en": "Organize practice files", "location_type": "indoor", "minutes": 30, "energy": "medium"}, {"id": "A07", "name_zh": "在合適位置慢走", "name_en": "Take a gentle walk in a suitable area", "location_type": "outdoor", "minutes": 15, "energy": "low"}, {"id": "A08", "name_zh": "觀察天空並畫草圖", "name_en": "Observe the sky and sketch", "location_type": "outdoor", "minutes": 20, "energy": "low"}, {"id": "A09", "name_zh": "在合適位置快走", "name_en": "Take a brisk walk in a suitable area", "location_type": "outdoor", "minutes": 30, "energy": "medium"}, {"id": "A10", "name_zh": "規劃小組練習", "name_en": "Plan a group exercise", "location_type": "indoor", "minutes": 45, "energy": "medium"}, {"id": "A11", "name_zh": "記錄自然色彩", "name_en": "Record colors in nature", "location_type": "outdoor", "minutes": 45, "energy": "low"}, {"id": "A12", "name_zh": "構思下一次社團活動", "name_en": "Brainstorm a future club activity", "location_type": "indoor", "minutes": 60, "energy": "medium"}];
+const T = {
+ zh:{title:"課間我想做什麼？",note:"教學模擬活動，不是校方公告",loc:"地點",min:"可用時間（分鐘）",en:"活動強度",
+  all:"不限",indoor:"室內",outdoor:"室外",low:"低",medium:"中",pick:"幫我選",reset:"重設篩選",clear:"清除紀錄",
+  hist:"最近 5 次",none:"沒有符合條件的活動",minutes:"分鐘",lang:"English",count:n=>`符合條件：${n} 個活動`},
+ en:{title:"What should I do between classes?",note:"Teaching simulation, not an official university notice",loc:"Location",min:"Time available (minutes)",en:"Energy level",
+  all:"Any",indoor:"Indoor",outdoor:"Outdoor",low:"Low",medium:"Medium",pick:"Pick for me",reset:"Reset filters",clear:"Clear history",
+  hist:"Last 5 picks",none:"No activities match these filters",minutes:"min",lang:"中文",count:n=>`Matching: ${n} activities`}
+};
+let lang="zh", history=[], last=null;
+const $=id=>document.getElementById(id);
+function matches(){const l=$("loc").value,m=+$("min").value,e=$("en").value;
+ return DATA.filter(a=>(l==="all"||a.location_type===l)&&a.minutes<=m&&(e==="all"||a.energy===e));}
+function fmt(a){const t=T[lang];return `${a.id} · ${lang==="zh"?a.name_zh:a.name_en} · ${a.minutes} ${t.minutes} · ${t[a.location_type]} · ${t[a.energy]}`;}
+function render(){const t=T[lang];document.documentElement.lang=lang==="zh"?"zh-Hant":"en";document.title=t.title;
+ ["title","note","loc","min","en","hist"].forEach(k=>$("t-"+k).textContent=t[k]);
+ for(const s of ["loc","en"])for(const o of $(s).options)o.textContent=t[o.value];
+ $("pick").textContent=t.pick;$("reset").textContent=t.reset;$("clear").textContent=t.clear;$("lang").textContent=t.lang;
+ $("result").textContent= last===null?"":(last==="none"?t.none:fmt(last));
+ $("history").innerHTML="";history.forEach(a=>{const li=document.createElement("li");li.textContent=fmt(a);$("history").appendChild(li);});
+ /*COUNTRENDER*/}
+$("pick").onclick=()=>{const c=matches();if(!c.length){last="none";}else{last=c[Math.floor(Math.random()*c.length)];history.unshift(last);history=history.slice(0,5);}render();};
+$("reset").onclick=()=>{$("loc").value="all";$("min").value="30";$("en").value="all";render();};
+$("clear").onclick=()=>{history=[];render();};
+$("lang").onclick=()=>{lang=lang==="zh"?"en":"zh";render();};
+["loc","min","en"].forEach(id=>$(id).onchange=render);
+render();
+</script></body></html>
