@@ -21,7 +21,7 @@ select{width:100%}
 <select id="min"><option value="15">15</option><option value="30" selected>30</option><option value="60">60</option></select>
 <label for="en" id="t-en"></label>
 <select id="en"><option value="all"></option><option value="low"></option><option value="medium"></option></select>
-<!--COUNT-->
+<p id="count" aria-live="polite"></p>
 <div class="row"><button id="pick"></button><button id="reset"></button><button id="clear"></button></div>
 <div id="result" aria-live="polite"></div>
 <h2 id="t-hist"></h2><ol id="history"></ol>
@@ -46,7 +46,7 @@ function render(){const t=T[lang];document.documentElement.lang=lang==="zh"?"zh-
  $("pick").textContent=t.pick;$("reset").textContent=t.reset;$("clear").textContent=t.clear;$("lang").textContent=t.lang;
  $("result").textContent= last===null?"":(last==="none"?t.none:fmt(last));
  $("history").innerHTML="";history.forEach(a=>{const li=document.createElement("li");li.textContent=fmt(a);$("history").appendChild(li);});
- /*COUNTRENDER*/}
+ $("count").textContent=t.count(matches().length);}
 $("pick").onclick=()=>{const c=matches();if(!c.length){last="none";}else{last=c[Math.floor(Math.random()*c.length)];history.unshift(last);history=history.slice(0,5);}render();};
 $("reset").onclick=()=>{$("loc").value="all";$("min").value="30";$("en").value="all";render();};
 $("clear").onclick=()=>{history=[];render();};
