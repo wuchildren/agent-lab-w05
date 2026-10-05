@@ -1,0 +1,62 @@
+[
+  {
+    "source": "announcement.txt",
+    "destination": "01_announcements/announcement.txt",
+    "reason": "Club announcement; same content as announcement_copy.txt"
+  },
+  {
+    "source": "announcement_copy.txt",
+    "destination": "01_announcements/announcement_copy.txt",
+    "reason": "Same content as announcement.txt; kept as a copy, not deleted"
+  },
+  {
+    "source": "budget_draft.txt",
+    "destination": "04_equipment_budget/budget_draft.txt",
+    "reason": "Draft budget, not approved"
+  },
+  {
+    "source": "equipment_backup.txt",
+    "destination": "04_equipment_budget/equipment_backup.txt",
+    "reason": "Same content as equipment_list.txt; kept as a copy"
+  },
+  {
+    "source": "equipment_list.txt",
+    "destination": "04_equipment_budget/equipment_list.txt",
+    "reason": "Equipment list; same content as equipment_backup.txt"
+  },
+  {
+    "source": "feedback_questions.txt",
+    "destination": "03_meetings/feedback_questions.txt",
+    "reason": "Feedback questions for members"
+  },
+  {
+    "source": "meeting_notes.txt",
+    "destination": "03_meetings/meeting_notes.txt",
+    "reason": "Meeting notes"
+  },
+  {
+    "source": "next_steps.txt",
+    "destination": "03_meetings/next_steps.txt",
+    "reason": "Follow-up actions from the meeting"
+  },
+  {
+    "source": "poster_text.txt",
+    "destination": "01_announcements/poster_text.txt",
+    "reason": "Poster wording for the activity"
+  },
+  {
+    "source": "proposal_final.txt",
+    "destination": "02_proposals/proposal_final.txt",
+    "reason": "Proposal v1 (outdoor, 30 min); says not final despite the name"
+  },
+  {
+    "source": "proposal_final2.txt",
+    "destination": "02_proposals/proposal_final2.txt",
+    "reason": "Proposal v2 (indoor, 20 min); different content from v1, still under discussion"
+  },
+  {
+    "source": "rain_plan.txt",
+    "destination": "02_proposals/rain_plan.txt",
+    "reason": "Rain alternative for the activity plan"
+  }
+]
